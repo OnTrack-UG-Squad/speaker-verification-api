@@ -1,11 +1,11 @@
 # pull official base image
 FROM ubuntu:20.04
 
-# Install Python 3.8, pip & development packages, psycopg2
+# Install Python 3.8, pip & development packages, psycopg2, libsndfile1 for speaker-verification
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
-    python3.8 python3-pip python3.8-dev postgresql-server-dev-12 gcc musl-dev netcat
+    python3.8 python3-pip python3.8-dev postgresql-server-dev-12 gcc musl-dev netcat libsndfile1
 
 # set work directory
 WORKDIR /usr/src/app
