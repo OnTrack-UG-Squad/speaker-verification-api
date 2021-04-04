@@ -57,6 +57,8 @@ def validate_recording(request):
       response_data["data"] = {"score": score}
     except KeyError:
         response_data["error"] = "Malformed Data"
+    except urllib.error.HTTPError as exception:
+        response_data["error"] = f"HTTPError - {exception}"
     except ObjectDoesNotExist:
         response_data["error"] = "User does not exist"
 
