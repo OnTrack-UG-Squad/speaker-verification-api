@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   web:
@@ -16,6 +16,13 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.dev.db
+  redis:
+    image: redis:6.0.10-buster
+    volumes: 
+      - redis:/data
+    env_file:
+      - ./.env.dev
 
 volumes:
   postgres_data:
+  redis: {}
