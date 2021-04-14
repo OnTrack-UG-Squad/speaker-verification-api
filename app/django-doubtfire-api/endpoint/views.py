@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError, DataError
+from django.db import IntegrityError, DataError, connection
 from django_redis import get_redis_connection
 
 from endpoint.services.speaker_wrapper import speaker_wrapper_enroll_user, speaker_wrapper_validate_recording
