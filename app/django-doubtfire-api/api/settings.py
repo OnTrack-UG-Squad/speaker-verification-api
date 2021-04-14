@@ -103,6 +103,29 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Redis
+REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
+
+# Caching
+# https://docs.djangoproject.com/en/3.2/topics/cache/
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        }
+    }
+}
+
+# Celery
+# https://docs.celeryproject.org/en/stable/userguide/configuration.html
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
