@@ -67,8 +67,8 @@ def validate_recording(request):
     return JsonResponse(response_data)
 
 # Test Redis
-def up(request):
+def redis_healthcheck(request):
     get_redis_connection().ping()
     connection.ensure_connection()
 
-    return HttpResponse("")
+    return HttpResponse("Redis is connected successfully")
