@@ -2,10 +2,10 @@ version: "3.7"
 
 services:
   web:
-    build: ./app
-    command: python3 django-doubtfire-api/manage.py runserver 0.0.0.0:8000
+    build: ./app/django-doubtfire-api/
+    command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./app/:/usr/src/app/
+      - ./app/django-doubtfire-api/:/usr/src/app/
     ports:
       - 8000:8000
     env_file:
