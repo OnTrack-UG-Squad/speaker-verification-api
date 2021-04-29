@@ -11,60 +11,61 @@ import urllib.error
 
 # Create your views here.
 
-'''
+"""
 
 {
     "id": 123456789,
     "recording_link": "https://speaker-ver-api-td.s3-ap-southeast-2.amazonaws.com/enrollment.flac"
 }
 
-'''
+"""
+
 
 @csrf_exempt
 def enroll_user(request):
-  if request.method == 'POST':
-    response_data = {"success": False}
-    json_data = json.loads(request.body)
-    try:
-      user_id = json_data['id']
-      recording_link = json_data['recording_link']
-      celery_enroll_user.delay(user_id, recording_link)
-      response_data["success"] = True
-    except ValueError:
-        response_data["error"] = "Field ID is invalid. Expected an interger."
-    except DataError:
-        response_data["error"] = "Integer for ID is out of range."
-    except IntegrityError:
-        response_data["error"] = "User is already enrolled"
-    except urllib.error.HTTPError as exception:
-        response_data["error"] = f"HTTPError - {exception}"
-    except KeyError:
-        response_data["error"] = "Malformed Data"
-        
-      
-    return JsonResponse(response_data)
+    if request.method == "POST":
+        response_data = {"success": False}
+        json_data = json.loads(request.body)
+        try:
+            user_id = json_data["id"]
+            recording_link = json_data["recording_link"]
+            celery_enroll_user.delay(user_id, recording_link)
+            response_data["success"] = True
+        except ValueError:
+            response_data["error"] = "Field ID is invalid. Expected an interger."
+        except DataError:
+            response_data["error"] = "Integer for ID is out of range."
+        except IntegrityError:
+            response_data["error"] = "User is already enrolled"
+        except urllib.error.HTTPError as exception:
+            response_data["error"] = f"HTTPError - {exception}"
+        except KeyError:
+            response_data["error"] = "Malformed Data"
+
+        return JsonResponse(response_data)
+
 
 @csrf_exempt
 def validate_recording(request):
-  if request.method == 'POST':
-    response_data = {"success": False}
-    json_data = json.loads(request.body)
-    try:
-      user_id = json_data['id']
-      recording_link = json_data['recording_link']
-      celery_async_result = celery_validate_user.delay(user_id, recording_link)
-      score = celery_async_result.get()
-      response_data["success"] = True
-      response_data["data"] = {"score": score}
-    except KeyError:
-        response_data["error"] = "Malformed Data"
-    except urllib.error.HTTPError as exception:
-        response_data["error"] = f"HTTPError - {exception}"
-    except ObjectDoesNotExist:
-        response_data["error"] = "User does not exist"
+    if request.method == "POST":
+        response_data = {"success": False}
+        json_data = json.loads(request.body)
+        try:
+            user_id = json_data["id"]
+            recording_link = json_data["recording_link"]
+            celery_async_result = celery_validate_user.delay(user_id, recording_link)
+            score = celery_async_result.get()
+            response_data["success"] = True
+            response_data["data"] = {"score": score}
+        except KeyError:
+            response_data["error"] = "Malformed Data"
+        except urllib.error.HTTPError as exception:
+            response_data["error"] = f"HTTPError - {exception}"
+        except ObjectDoesNotExist:
+            response_data["error"] = "User does not exist"
 
-      
-    return JsonResponse(response_data)
+        return JsonResponse(response_data)
+
 
 # Test Redis
 def redis_healthcheck(request):
