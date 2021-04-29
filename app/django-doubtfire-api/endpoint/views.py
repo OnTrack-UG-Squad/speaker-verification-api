@@ -4,8 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError, DataError, connection
 from django_redis import get_redis_connection
-
-from endpoint.services.speaker_wrapper import speaker_wrapper_enroll_user, speaker_wrapper_validate_recording
+from endpoint.tasks import celery_enroll_user, celery_validate_user
 
 import json
 import urllib.error
@@ -29,7 +28,7 @@ def enroll_user(request):
     try:
       user_id = json_data['id']
       recording_link = json_data['recording_link']
-      speaker_wrapper_enroll_user(user_id, recording_link)
+      celery_enroll_user.delay(user_id, recording_link)
       response_data["success"] = True
     except ValueError:
         response_data["error"] = "Field ID is invalid. Expected an interger."
@@ -53,7 +52,8 @@ def validate_recording(request):
     try:
       user_id = json_data['id']
       recording_link = json_data['recording_link']
-      score = speaker_wrapper_validate_recording(user_id, recording_link)
+      celery_async_result = celery_validate_user.delay(user_id, recording_link)
+      score = celery_async_result.get()
       response_data["success"] = True
       response_data["data"] = {"score": score}
     except KeyError:
