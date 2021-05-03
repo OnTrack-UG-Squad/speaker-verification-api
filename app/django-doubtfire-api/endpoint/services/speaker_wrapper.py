@@ -1,4 +1,9 @@
-from speaker_verification.deep_speaker.audio import NUM_FRAMES, SAMPLE_RATE, read_mfcc, sample_from_mfcc
+from speaker_verification.deep_speaker.audio import (
+    NUM_FRAMES,
+    SAMPLE_RATE,
+    read_mfcc,
+    sample_from_mfcc,
+)
 from speaker_verification.model_evaluation import run_user_evaluation
 from endpoint.models import speaker_verification_user
 
@@ -12,7 +17,8 @@ import base64
 import shutil
 import tempfile
 import urllib.request
-import os 
+import os
+
 
 def download_as_temp_file(audio_file_link):
 
@@ -41,17 +47,18 @@ def speaker_wrapper_enroll_user(user_id, audio_file_link):
 
     return
 
+
 def speaker_wrapper_validate_recording(user_id, audio_file_link):
-    
+
     audio_file_path = download_as_temp_file(audio_file_link)
 
     user_object = speaker_verification_user.objects.get(id=user_id)
 
     mfcc_bytes = base64.b64decode(user_object.mfcc)
     mfcc = pickle.loads(mfcc_bytes)
-    
+
     score = run_user_evaluation(mfcc, audio_file_path)
-    
+
     os.remove(audio_file_path)
 
-    return round(score[0]*100, 2)
+    return round(score[0] * 100, 2)

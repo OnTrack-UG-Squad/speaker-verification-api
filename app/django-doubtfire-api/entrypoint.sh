@@ -11,6 +11,6 @@ then
     echo "PostgreSQL started"
 fi
 
-python3 django-doubtfire-api/manage.py migrate
+python3 manage.py migrate
 
 exec "$@"
