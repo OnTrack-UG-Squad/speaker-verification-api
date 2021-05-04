@@ -5,11 +5,13 @@ services:
     build: ./app/django-doubtfire-api/
     command: >
         bash -c "python3 manage.py runserver 0.0.0.0:8000 
-        & celery -A api worker --loglevel=INFO"
+        & celery -A api worker --loglevel=INFO
+        & celery flower -A api --address=0.0.0.0 --port=5555"
     volumes:
       - ./app/django-doubtfire-api/:/usr/src/app/
     ports:
       - 8000:8000
+      - 5555:5555
     env_file:
       - ./.env.dev
   db:
