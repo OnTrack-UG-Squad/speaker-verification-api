@@ -120,6 +120,9 @@ CACHES = {
 CELERY_BROKER_URL = REDIS_URL
 CELERY_RESULT_BACKEND = REDIS_URL
 
+# Flower Dashboard
+FLOWER_URL = os.environ.get("FLOWER_URL")
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
