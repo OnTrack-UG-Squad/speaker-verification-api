@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError, DataError, connection
 from django_redis import get_redis_connection
 from endpoint.tasks import celery_enroll_user, celery_validate_user
+from django.conf import settings
 
 import json
 import urllib.error
@@ -67,9 +68,14 @@ def validate_recording(request):
         return JsonResponse(response_data)
 
 
-# Test Redis
-def redis_healthcheck(request):
+def check_redis_health(request):
     get_redis_connection().ping()
     connection.ensure_connection()
 
     return HttpResponse("Redis is connected successfully")
+
+
+def redirect_flower_dashboard(request):
+    FLOWER_URL = settings.FLOWER_URL
+
+    return redirect(FLOWER_URL)
