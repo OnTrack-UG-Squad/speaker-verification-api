@@ -1,5 +1,4 @@
-from django.urls import include, path
-from django.conf.urls import url
+from django.urls import path
 from endpoint.views import (
     enroll_user,
     validate_recording,
