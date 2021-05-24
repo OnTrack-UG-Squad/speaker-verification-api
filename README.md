@@ -1,4 +1,4 @@
-# speaker-verification-api
+# Speaker Verification Django RESTful API
 
 As [Speaker Verification](https://github.com/OnTrack-UG-Squad/speaker-verification), a Python package, matures, the direction of its finial implementation needs to be considered. This project tends to be a continually evolving extension of Doubtfire. This direction, Speaker Verification API Based on Django, will serve as an effective way to guide next steps on how the project will proceed.
 
